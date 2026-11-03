@@ -1,11 +1,58 @@
-# companion-module-[replace with module name]
+# ShowRevue Companion Module
 
-See [HELP.md](./companion/HELP.md) and [LICENSE](./LICENSE)
+Bitfocus Companion module for controlling ShowRevue over its OSC remote-control port.
 
-## Getting started
+Version 1.0.0 covers the OSC control surface in `ShowRevue/ShowRevue/Managers/OSCManager.swift`:
 
-Executing a `yarn` command should perform all necessary steps to develop the module, if it does not then follow the steps below.
+- Transport: record, stop, play, pause
+- Navigation: next/previous cue, next/previous timecode segment, next/previous frame, forward/back, next/previous recording
+- Loop control: set/go loop in/out, enable/disable/toggle/stop/clear loop
+- Timeline and view (ShowRevue 1.0 RC 3 or later): zoom the Playback timeline in, out or to fit, and go back to the Live view without recording
+- Scrubbing: step frames while a button is held, and dial presets for frame, cue and timeline zoom on a Stream Deck+ or other rotary surface
+- Stage Display messaging: custom message set/clear, preset trigger, preset toggle
+- Stage Display masking: on, off, toggle
+- NDI output: set source (Stage Display / GUI Mirror)
+- Show State: preshow, act, interval (optional planned length), finished, reset, next curtain, next show
+- Session: set session type, set next session number, start a new session
+- Record When Timecode Runs: arm, disarm, toggle
+- Safety: Monitor Only kill switch (on/off/toggle) and arm outputs, with feedback and presets
+- Lighting: set the main show list (the Eos cue list or MA sequence the widgets and timing follow) from a dropdown of the lists ShowRevue has seen, or back to Automatic. Needs a ShowRevue build newer than 1.0.1 (the one that adds `/showrevue/mainlist`)
 
-The module can be built once with `yarn build`. This should be enough to get the module to be loadable by companion.
+## Configuration
 
-While developing the module, by using `yarn dev` the compiler will be run in watch mode to recompile the files on change.
+Point the module at the ShowRevue machine.
+
+- **Host**: ShowRevue IP or hostname
+- **Command port**: ShowRevue OSC Control port, default `8001`
+- **Feedback**: enable **Send feedback to Companion** in ShowRevue → **Preferences → Companion** (default port `8002`)
+
+## Feedback (two-way)
+
+The module is two-way. ShowRevue publishes its live state back to Companion over OSC
+(`/showrevue/state/*`) on a separate outbound path. Turn on **Send feedback to Companion** in
+ShowRevue → **Preferences → Companion**. If ShowRevue and Companion run on the same machine, the
+command port (`8001`) and the feedback port (`8002`) must differ.
+
+**Variables** (use in button text): `recording`, `timecode`, `fps`, `cue_number`, `cue_label`,
+`show_name`, `time_since_cue`, `ltc_status`, `show_phase`, `show_timer`, `session_name`,
+`session_type`, `streaming`, `ndi_sending`, `note_count`, `next_curtain`, `source_health`,
+`disk_free`, `curtain_countdown`, `monitor_only`, `outputs_armed`, `tc_trigger_armed`,
+`tc_trigger_state`, `audio_silent_seconds`, `main_list` (a key such as `ma3:2`, or `auto`), `main_list_name`.
+
+**Feedbacks** (boolean, for button colour and style): **Recording**, **Source problem**,
+**Monitor Only**, **Outputs armed**, **LTC locked**, **Show phase**, **Streaming**, **NDI output on**,
+**Record When Timecode Runs armed**, **Record When Timecode Runs state**, **Audio silent** (with a
+configurable seconds threshold), **Disk space low** (with a configurable GB threshold), and **Main show
+list is** (pick a list).
+
+**Overlay widgets**: show, hide, toggle or recolour any overlay widget by kind (`cueNumber`,
+`ltc`, `showState`, `customText`, …) or by the custom OSC ID set in the layout inspector. The
+Overlay Widgets preset group has a toggle button for the eight most flipped.
+
+## Build
+
+```bash
+./node_modules/.bin/companion-module-build
+```
+
+Use the local binary, not `yarn package`, which collides with the yarn 4 built-in.

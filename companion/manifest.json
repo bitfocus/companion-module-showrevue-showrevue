@@ -1,28 +1,39 @@
 {
 	"$schema": "../node_modules/@companion-module/base/assets/manifest.schema.json",
 	"type": "connection",
-	"id": "your-module-name",
-	"name": "your-module-name",
-	"shortname": "module-shortname",
-	"description": "A short one line description of your module",
-	"version": "0.0.0",
+	"id": "showrevue-showrevue",
+	"name": "ShowRevue",
+	"shortname": "showrevue",
+	"description": "Control ShowRevue transport, looping, messaging, masking and overlay widgets over OSC, with live state feedback.",
+	"version": "1.1.0",
 	"license": "MIT",
-	"repository": "git+https://github.com/bitfocus/companion-module-your-module-name.git",
-	"bugs": "https://github.com/bitfocus/companion-module-your-module-name/issues",
+	"repository": "git+https://github.com/bitfocus/companion-module-showrevue-showrevue.git",
+	"bugs": "https://github.com/bitfocus/companion-module-showrevue-showrevue/issues",
 	"maintainers": [
 		{
-			"name": "Your name",
-			"email": "Your email"
+			"name": "Deanbau",
+			"email": "39572328+Deanbau@users.noreply.github.com",
+			"github": "Deanbau"
 		}
 	],
 	"runtime": {
-		"type": "node26",
+		"type": "node22",
 		"api": "nodejs-ipc",
-		"apiVersion": "0.0.0",
-		"entrypoint": "../dist/main.js"
+		"apiVersion": "2.0.4",
+		"entrypoint": "../src/main.js"
 	},
-	"legacyIds": [],
-	"manufacturer": "Your company",
-	"products": ["Your product"],
-	"keywords": []
+	"legacyIds": [
+		"revueshow-revueshow"
+	],
+	"manufacturer": "ShowRevue",
+	"products": [
+		"ShowRevue"
+	],
+	"keywords": [
+		"osc",
+		"theatre",
+		"transport",
+		"messaging",
+		"stagedisplay"
+	]
 }

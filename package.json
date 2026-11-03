@@ -24,7 +24,7 @@
 	"devDependencies": {
 		"@companion-module/tools": "^3.1.1",
 		"prettier": "^3.8.3",
-		"sharp": "^0.34.5"
+		"sharp": "^0.35.5"
 	},
 	"prettier": "@companion-module/tools/.prettierrc.json",
 	"packageManager": "yarn@4.12.0"

@@ -469,6 +469,29 @@ module.exports = function (self) {
 			options: [],
 			callback: async () => { await self.sendCommand('/showrevue/timewarp', [], 'TimeWarp Enter') },
 		},
+		timewarp_layout: {
+			name: 'TimeWarp: Set layout',
+			options: [
+				{
+					id: 'layout',
+					type: 'dropdown',
+					label: 'Layout',
+					default: 'full',
+					choices: [
+						{ id: 'full', label: 'Full (replay takes the picture, live blurred behind)' },
+						{ id: 'side', label: 'Side by side' },
+						{ id: 'pip', label: 'Picture in picture (corner)' },
+						{ id: 'next', label: 'Next layout' },
+					],
+					tooltip: 'How TimeWarp sits over the live picture. Works whether or not TimeWarp is up. Needs ShowRevue 1.1 or later.',
+				},
+			],
+			callback: async (event) => {
+				const layout = String(event.options.layout ?? 'full')
+				if (!['full', 'side', 'pip', 'next'].includes(layout)) return
+				await self.sendCommand('/showrevue/timewarp/layout', [layout], `TimeWarp layout ${layout}`)
+			},
+		},
 		timewarp_exit: {
 			name: 'TimeWarp: Exit to live',
 			options: [],
@@ -681,6 +704,31 @@ module.exports = function (self) {
 						return
 					}
 					await self.sendCommand('/showrevue/mainlist', [list], `Main list ${list}`)
+				},
+			},
+			artnet_stream: {
+				name: 'Timecode: Set Art-Net stream',
+				options: [
+					{
+						id: 'stream',
+						type: 'dropdown',
+						label: 'Stream ID',
+						default: 'any',
+						choices: [{ id: 'any', label: 'Any stream' }, ...Array.from({ length: 17 }, (_, i) => ({ id: String(i), label: `Stream ${i}` }))],
+						allowCustom: true,
+						tooltip: 'Which Art-Net timecode stream ShowRevue follows. grandMA3 numbers its streams 1 to 16; most other Art-Net sources send 0. Type a number up to 255 for anything else.',
+					},
+				],
+				callback: async (event) => {
+					const raw = String(event.options.stream ?? '').trim().toLowerCase()
+					if (!raw) return
+					if (raw === 'any') {
+						await self.sendCommand('/showrevue/timecode/artnet/stream/any', [], 'Art-Net stream any')
+						return
+					}
+					const n = Number(raw)
+					if (!Number.isInteger(n) || n < 0 || n > 255) return // ShowRevue refuses anything else; do not send a guess
+					await self.sendCommand('/showrevue/timecode/artnet/stream', [n], `Art-Net stream ${n}`)
 				},
 			},
 			arm_outputs: {

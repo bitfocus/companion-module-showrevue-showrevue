@@ -16,7 +16,9 @@ Version 1.0.0 covers the OSC control surface in `ShowRevue/ShowRevue/Managers/OS
 - Session: set session type, set next session number, start a new session
 - Record When Timecode Runs: arm, disarm, toggle
 - Safety: Monitor Only kill switch (on/off/toggle) and arm outputs, with feedback and presets
-- Lighting: set the main show list (the Eos cue list or MA sequence the widgets and timing follow) from a dropdown of the lists ShowRevue has seen, or back to Automatic. Needs a ShowRevue build newer than 1.0.1 (the one that adds `/showrevue/mainlist`)
+- Lighting: set the main show list (the Eos cue list or MA sequence the widgets and timing follow) from a dropdown of the lists ShowRevue has seen, or back to Automatic. Needs ShowRevue 1.1 or later.
+- TimeWarp: set the layout (Full, Side by side, Picture in picture) or step to the next one. Needs ShowRevue 1.1 or later.
+- Timecode: choose which Art-Net timecode stream ShowRevue follows (Any, or a stream number). Needs ShowRevue 1.1 or later.
 
 ## Configuration
 

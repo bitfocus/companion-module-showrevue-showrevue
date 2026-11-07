@@ -5,7 +5,7 @@
 	"name": "ShowRevue",
 	"shortname": "showrevue",
 	"description": "Control ShowRevue transport, looping, messaging, masking and overlay widgets over OSC, with live state feedback.",
-	"version": "1.1.1",
+	"version": "1.1.2",
 	"license": "MIT",
 	"repository": "git+https://github.com/bitfocus/companion-module-showrevue-showrevue.git",
 	"bugs": "https://github.com/bitfocus/companion-module-showrevue-showrevue/issues",

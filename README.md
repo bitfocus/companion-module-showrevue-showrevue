@@ -2,7 +2,7 @@
 
 Bitfocus Companion module for controlling ShowRevue over its OSC remote-control port.
 
-Version 1.0.0 covers the OSC control surface in `ShowRevue/ShowRevue/Managers/OSCManager.swift`:
+This module covers ShowRevue's OSC remote-control surface:
 
 - Transport: record, stop, play, pause
 - Navigation: next/previous cue, next/previous timecode segment, next/previous frame, forward/back, next/previous recording

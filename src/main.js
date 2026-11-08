@@ -14,12 +14,13 @@ class ModuleInstance extends InstanceBase {
 		this.frameHold = createFrameHold((address, args, summary) => this.sendCommand(address, args, summary))
 		this.listenSocket = null
 		this.listenPort = null
+		this.listenError = ''
 		// Live state pushed back by ShowRevue over OSC (/showrevue/state/*).
 		this.appState = {
 			recording: false, timecode: '', fps: '', cue_number: '', cue_label: '', show_name: '',
 			time_since_cue: '', ltc_status: '', show_phase: '', show_timer: '',
 			session_name: '', session_type: '', streaming: '0', ndi_sending: '0',
-			note_count: '0', next_curtain: '', source_health: 'off', disk_free: '',
+			note_count: '0', next_curtain: '', source_health: '', disk_free: '',
 			curtain_countdown: '', audio_silent_seconds: '0', tc_trigger_state: '',
 			main_list: 'auto', main_list_name: 'Auto',
 		}
@@ -57,10 +58,7 @@ class ModuleInstance extends InstanceBase {
 			this.socket.close()
 			this.socket = null
 		}
-		if (this.listenSocket) {
-			this.listenSocket.close()
-			this.listenSocket = null
-		}
+		this.closeListenSocket()
 	}
 
 	async configUpdated(config) {
@@ -85,7 +83,6 @@ class ModuleInstance extends InstanceBase {
 				label: 'Target host',
 				width: 8,
 				default: '127.0.0.1',
-				useVariables: true,
 			},
 			{
 				type: 'textinput',
@@ -143,6 +140,10 @@ class ModuleInstance extends InstanceBase {
 			return
 		}
 
+		if (this.listenError) {
+			this.updateStatus(InstanceStatus.UnknownWarning, this.listenError)
+			return
+		}
 		this.updateStatus(InstanceStatus.Ok)
 	}
 
@@ -186,26 +187,48 @@ class ModuleInstance extends InstanceBase {
 	// Bind a UDP listener for state ShowRevue pushes back (/showrevue/state/*).
 	ensureListenSocket() {
 		const port = Number(this.config.feedbackPort)
-		if (!Number.isInteger(port) || port <= 0 || port > 65535) return
+		if (!Number.isInteger(port) || port <= 0 || port > 65535) {
+			// A blank or invalid port turns feedback off: stop listening on the old one.
+			this.closeListenSocket()
+			return
+		}
 		if (this.listenSocket && this.listenPort === port) return
+		this.closeListenSocket()
+		const sock = require('node:dgram').createSocket('udp4')
+		sock.on('error', (error) => {
+			this.log('error', `Feedback listener error: ${error.message}`)
+			try {
+				sock.close()
+			} catch {
+				// ignore
+			}
+			if (this.listenSocket === sock) {
+				this.listenSocket = null
+				this.listenPort = null
+			}
+			this.listenError = `Feedback port ${port} unavailable: ${error.message}`
+			this.updateStatus(InstanceStatus.UnknownWarning, this.listenError)
+		})
+		sock.on('message', (msg) => this.handleStateMessage(msg))
+		sock.bind(port, () => {
+			this.listenPort = port
+			this.listenError = ''
+			this.log('info', `Listening for ShowRevue state feedback on UDP ${port}`)
+		})
+		this.listenSocket = sock
+	}
+
+	closeListenSocket() {
 		if (this.listenSocket) {
 			try {
 				this.listenSocket.close()
 			} catch {
 				// ignore
 			}
-			this.listenSocket = null
 		}
-		const sock = require('node:dgram').createSocket('udp4')
-		sock.on('error', (error) => {
-			this.log('error', `Feedback listener error: ${error.message}`)
-		})
-		sock.on('message', (msg) => this.handleStateMessage(msg))
-		sock.bind(port, () => {
-			this.listenPort = port
-			this.log('info', `Listening for ShowRevue state feedback on UDP ${port}`)
-		})
-		this.listenSocket = sock
+		this.listenSocket = null
+		this.listenPort = null
+		this.listenError = ''
 	}
 
 	// Parse one /showrevue/state/<key> message and update state + feedbacks.
@@ -270,7 +293,13 @@ class ModuleInstance extends InstanceBase {
 
 		this.ensureSocket()
 
-		const packet = buildOscPacket(address, args)
+		let packet
+		try {
+			packet = buildOscPacket(address, args)
+		} catch (error) {
+			this.log('error', `Failed to send OSC command "${summary}": ${error.message}`)
+			return
+		}
 		this.log('debug', `SEND ${address} ${args.map((arg) => JSON.stringify(arg)).join(' ')}`.trim())
 
 		await new Promise((resolve, reject) => {
@@ -283,7 +312,8 @@ class ModuleInstance extends InstanceBase {
 			})
 		})
 			.then(() => {
-				this.updateStatus(InstanceStatus.Ok)
+				if (this.listenError) this.updateStatus(InstanceStatus.UnknownWarning, this.listenError)
+				else this.updateStatus(InstanceStatus.Ok)
 				this.recordSentState({
 					lastCommand: summary,
 					...stateUpdate,
@@ -297,3 +327,4 @@ class ModuleInstance extends InstanceBase {
 }
 
 module.exports = ModuleInstance
+module.exports.UpgradeScripts = require('./upgrades')

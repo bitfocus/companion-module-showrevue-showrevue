@@ -351,6 +351,7 @@ module.exports = function (self) {
 				{
 					id: 'mode',
 					type: 'dropdown',
+					disableAutoExpression: true,
 					label: 'Action',
 					default: 'toggle',
 					choices: [
@@ -389,7 +390,7 @@ module.exports = function (self) {
 				const kind = String(event.options.kind || '').trim()
 				const color = String(event.options.color || '').trim() || 'none'
 				if (!kind) return
-				await self.sendCommand(`/showrevue/widget/${kind}/color`, [{ type: 's', value: color }], `Widget ${kind} colour ${color}`)
+				await self.sendCommand(`/showrevue/widget/${kind}/color`, [color], `Widget ${kind} colour ${color}`)
 			},
 		},
 		mask_toggle: {
@@ -616,6 +617,7 @@ module.exports = function (self) {
 				{
 					id: 'source',
 					type: 'dropdown',
+					disableAutoExpression: true,
 					label: 'Source',
 					default: 'showrevuelive',
 					choices: [
@@ -635,6 +637,7 @@ module.exports = function (self) {
 				{
 					id: 'state',
 					type: 'dropdown',
+					disableAutoExpression: true,
 					label: 'State',
 					default: 'toggle',
 					choices: [
@@ -737,6 +740,7 @@ module.exports = function (self) {
 				{
 					id: 'state',
 					type: 'dropdown',
+					disableAutoExpression: true,
 					label: 'State',
 					default: 'toggle',
 					choices: [
@@ -757,6 +761,7 @@ module.exports = function (self) {
 				{
 					id: 'state',
 					type: 'dropdown',
+					disableAutoExpression: true,
 					label: 'State',
 					default: 'toggle',
 					choices: [

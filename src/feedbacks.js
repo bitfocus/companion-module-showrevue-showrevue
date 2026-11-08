@@ -7,7 +7,7 @@ module.exports = function (self) {
 		recording: {
 			name: 'Recording',
 			type: 'boolean',
-			label: 'When ShowRevue is recording',
+			description: 'When ShowRevue is recording',
 			defaultStyle: {
 				bgcolor: combineRgb(200, 0, 0),
 				color: combineRgb(255, 255, 255),
@@ -20,7 +20,7 @@ module.exports = function (self) {
 		source_problem: {
 			name: 'Source problem',
 			type: 'boolean',
-			label: 'When the camera/source is not OK (no signal / off)',
+			description: 'When the camera/source is not OK (no signal / off)',
 			defaultStyle: {
 				bgcolor: combineRgb(200, 120, 0),
 				color: combineRgb(255, 255, 255),
@@ -28,7 +28,7 @@ module.exports = function (self) {
 			options: [],
 			callback: () => {
 				const h = self.appState?.source_health
-				return h !== undefined && h !== 'ok'
+				return !!h && h !== 'ok'
 			},
 		},
 		// Monitor Only — global kill switch engaged (all outbound dead). Glow orange so
@@ -36,7 +36,7 @@ module.exports = function (self) {
 		monitor_only: {
 			name: 'Monitor Only',
 			type: 'boolean',
-			label: 'When Monitor Only (kill switch) is engaged',
+			description: 'When Monitor Only (kill switch) is engaged',
 			defaultStyle: {
 				bgcolor: combineRgb(220, 120, 0),
 				color: combineRgb(0, 0, 0),
@@ -48,7 +48,7 @@ module.exports = function (self) {
 		ltc_locked: {
 			name: 'LTC locked',
 			type: 'boolean',
-			label: 'When timecode is locked',
+			description: 'When timecode is locked',
 			defaultStyle: {
 				bgcolor: combineRgb(0, 140, 60),
 				color: combineRgb(255, 255, 255),
@@ -60,7 +60,7 @@ module.exports = function (self) {
 		show_phase: {
 			name: 'Show phase',
 			type: 'boolean',
-			label: 'When the show is in this phase',
+			description: 'When the show is in this phase',
 			defaultStyle: {
 				bgcolor: combineRgb(120, 60, 200),
 				color: combineRgb(255, 255, 255),
@@ -90,7 +90,7 @@ module.exports = function (self) {
 		streaming: {
 			name: 'Streaming',
 			type: 'boolean',
-			label: 'When ShowRevue is streaming',
+			description: 'When ShowRevue is streaming',
 			defaultStyle: {
 				bgcolor: combineRgb(0, 90, 200),
 				color: combineRgb(255, 255, 255),
@@ -102,7 +102,7 @@ module.exports = function (self) {
 		ndi_sending: {
 			name: 'NDI output on',
 			type: 'boolean',
-			label: 'When NDI output is on',
+			description: 'When NDI output is on',
 			defaultStyle: {
 				bgcolor: combineRgb(0, 120, 120),
 				color: combineRgb(255, 255, 255),
@@ -114,7 +114,7 @@ module.exports = function (self) {
 		outputs_armed: {
 			name: 'Outputs armed',
 			type: 'boolean',
-			label: 'When outputs are armed (fireback enabled)',
+			description: 'When outputs are armed (fireback enabled)',
 			defaultStyle: {
 				bgcolor: combineRgb(200, 0, 0),
 				color: combineRgb(255, 255, 255),
@@ -206,7 +206,7 @@ module.exports = function (self) {
 		tc_trigger_armed: {
 			name: 'Record When Timecode Runs armed',
 			type: 'boolean',
-			label: 'When Record When Timecode Runs is armed',
+			description: 'When Record When Timecode Runs is armed',
 			defaultStyle: {
 				bgcolor: combineRgb(180, 0, 0),
 				color: combineRgb(255, 255, 255),
@@ -218,7 +218,7 @@ module.exports = function (self) {
 		main_list: {
 			name: 'Main show list is',
 			type: 'boolean',
-			label: 'When this is the main show list',
+			description: 'When this is the main show list',
 			defaultStyle: {
 				bgcolor: combineRgb(0, 90, 200),
 				color: combineRgb(255, 255, 255),

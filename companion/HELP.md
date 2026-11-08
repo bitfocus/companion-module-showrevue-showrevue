@@ -20,7 +20,6 @@ For live feedback, also enable **Send feedback to Companion** in ShowRevue → *
 | --- | --- | --- | --- |
 | **8001** | Companion → ShowRevue | OSC **commands** (record, cues, notes, …) | This module's *target port* = ShowRevue → Preferences → OSC Control listener |
 | **8002** | ShowRevue → Companion | live **feedback** state (`/showrevue/state/*`) | ShowRevue → Preferences → Companion feedback port |
-| **8000** | Companion → ShowRevue | optional **variable polling** over HTTP | ShowRevue's Companion HTTP port |
 
 > **Same machine?** The command port (8001) and the feedback port (8002) **must be different**. Two listeners can't share one UDP port on one host. They only ever match when ShowRevue and Companion run on different machines.
 

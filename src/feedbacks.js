@@ -126,7 +126,7 @@ module.exports = function (self) {
 			tc_trigger_state: {
 				name: 'Record When Timecode Runs state',
 				type: 'boolean',
-				label: 'When the Record When Timecode Runs state matches',
+				description: 'When the Record When Timecode Runs state matches',
 				defaultStyle: {
 					bgcolor: combineRgb(0, 140, 60),
 					color: combineRgb(255, 255, 255),
@@ -154,7 +154,7 @@ module.exports = function (self) {
 			audio_silent: {
 				name: 'Audio silent',
 				type: 'boolean',
-				label: 'When live audio has been silent for at least N seconds',
+				description: 'When live audio has been silent for at least N seconds',
 				defaultStyle: {
 					bgcolor: combineRgb(200, 120, 0),
 					color: combineRgb(255, 255, 255),
@@ -181,7 +181,7 @@ module.exports = function (self) {
 			disk_low: {
 				name: 'Disk space low',
 				type: 'boolean',
-				label: 'When free space on the recording volume is below N GB',
+				description: 'When free space on the recording volume is below N GB',
 				defaultStyle: {
 					bgcolor: combineRgb(200, 0, 0),
 					color: combineRgb(255, 255, 255),

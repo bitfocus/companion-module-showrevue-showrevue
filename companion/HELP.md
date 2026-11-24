@@ -35,7 +35,7 @@ For live feedback, also enable **Send feedback to Companion** in ShowRevue → *
 - Stage Display message presets
 - Stage Display output mask on/off/toggle
 - **Notes**: send a free-text note, or fire a one-tap quick-note preset, into ShowRevue at the current timecode (pick the department)
-- **Overlay widgets**: show, hide, toggle or recolour any overlay widget by kind (Cue Number, Timecode, Show State, Custom Text…) or by its custom OSC ID
+- **Overlay widgets**: show, hide, toggle or recolour any overlay widget by kind (Cue Number, Timecode, Show State, Custom Text…) or by its custom OSC ID. Recolouring is ignored on the read-only Default layout (duplicate it first), and needs a ShowRevue build newer than 1.2.3: on 1.2.3 or earlier the colour is accepted but not drawn.
 - **Show State**: preshow, act N, interval (with an optional planned length in seconds), finished, reset
 - **Session**: set the session type (1 to 4, or a custom name), set the next session number, start a new session
 - **Record When Timecode Runs**: arm, disarm or toggle the timecode record trigger. Arming does not start a take by itself; a take starts when timecode runs for a full second
